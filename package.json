@@ -1,0 +1,8 @@
+{
+  "name": "codevolution-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Codevolution-INT20H-2023/codevolution-api.git",
+  "author": "just-hoshinon <mwadman2018@gmail.com>",
+  "license": "MIT"
+}
