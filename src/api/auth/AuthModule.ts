@@ -22,6 +22,7 @@ import { JwtGuard } from "../../security/JwtGuard";
           expiresIn: configService.jwtTtl,
         },
       }),
-    })],
+    }),
+  ConfigModule],
 })
 export class AuthModule {}

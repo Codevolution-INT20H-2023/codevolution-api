@@ -5,6 +5,7 @@ import { RecipeRepository } from "../api/recipes/RecipeRepository";
 import { RecipeCategoryRepository } from "../api/recipes/recipe-categories/RecipeCategoryRepository";
 import { IngredientCategoryRepository } from "../api/ingredients/ingredient-categories/IngredientCategoryRepository";
 import { IngredientRepository } from "../api/ingredients/IngredientRepository";
+import { RecipeProductRepository } from "../api/recipes/RecipeProductRepository";
 
 @Module({
   providers: [
@@ -12,6 +13,7 @@ import { IngredientRepository } from "../api/ingredients/IngredientRepository";
     UserRepository,
     RecipeRepository,
     RecipeCategoryRepository,
+    RecipeProductRepository,
     IngredientCategoryRepository,
     IngredientRepository,
   ],
@@ -20,6 +22,7 @@ import { IngredientRepository } from "../api/ingredients/IngredientRepository";
     UserRepository,
     RecipeRepository,
     RecipeCategoryRepository,
+    RecipeProductRepository,
     IngredientCategoryRepository,
     IngredientRepository,
   ],

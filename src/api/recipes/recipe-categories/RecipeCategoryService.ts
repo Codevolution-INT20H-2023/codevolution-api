@@ -1,30 +1,31 @@
 import { Injectable } from "@nestjs/common";
 import { CreateRecipeCategoryData, UpdateRecipeCategoryData } from "../RecipeDatas";
+import { RecipeCategoryRepository } from "./RecipeCategoryRepository";
 
 @Injectable()
 export class RecipeCategoryService {
   constructor(
-    private recipeCategoryService: RecipeCategoryService,
+    private recipeCategoryRepository: RecipeCategoryRepository,
   ) {}
 
   create(data: CreateRecipeCategoryData) {
-    return this.recipeCategoryService.create(data);
+    return this.recipeCategoryRepository.create(data);
   }
 
   get(id: string) {
-    return this.recipeCategoryService.get(id);
+    return this.recipeCategoryRepository.get(id);
   }
 
   async delete(id: string) {
-    await this.recipeCategoryService.delete(id);
+    await this.recipeCategoryRepository.delete(id);
   }
 
   getAll(query) {
-    return this.recipeCategoryService.getAll(query);
+    return this.recipeCategoryRepository.getAll(query);
   }
 
   async update(id: string, data: UpdateRecipeCategoryData) {
-    await this.recipeCategoryService.update(id, data);
+    await this.recipeCategoryRepository.update(id, data);
   }
 
 }
