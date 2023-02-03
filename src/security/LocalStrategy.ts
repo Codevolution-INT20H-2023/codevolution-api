@@ -16,10 +16,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(username: string, password: string) {
     const user = await this.userRepository.find(username, password);
 
-    console.log(user);
-
     if (!user) {
-      return new UnauthorizedException('The email or password are incorrect');
+      throw new UnauthorizedException('The email or password are incorrect');
     }
 
     return user;
