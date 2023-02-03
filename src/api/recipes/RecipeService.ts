@@ -2,12 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { RecipeRepository } from "./RecipeRepository";
 import { CreateProductDTO, CreateRecipeDTO, UpdateProductDTO, UpdateRecipeDTO } from "./RecipeDTOs";
 import { RecipeProductRepository } from "./RecipeProductRepository";
+import { IngredientService } from "../ingredients/IngredientService";
 
 @Injectable()
 export class RecipeService {
   constructor(
     private recipeRepository: RecipeRepository,
     private recipeProductRepository: RecipeProductRepository,
+    private ingredientService: IngredientService,
   ) {}
 
   async create({ products, ...data }: CreateRecipeDTO) {
@@ -24,16 +26,28 @@ export class RecipeService {
     return this.recipeProductRepository.create(recipeId, data);
   }
 
-  get(id: string) {
-    return this.recipeRepository.get(id);
+  async get(id: string) {
+    const recipe = await this.recipeRepository.get(id);
+    const products = await this.getProducts(id);
+
+    return {
+      ...recipe,
+      products,
+    };
   }
 
   delete(id: string) {
     return this.recipeRepository.delete(id);
   }
 
-  getAll(query) {
-    return this.recipeRepository.getAll(query);
+  async getAll(query) {
+    const results = [];
+    const recipes = await this.recipeRepository.getAll(query);
+    for (const recipe of recipes) {
+      results.push(await this.get(recipe.id));
+    }
+
+    return results;
   }
 
   update(id: string, data: UpdateRecipeDTO) {
@@ -57,6 +71,22 @@ export class RecipeService {
 
   async updateProduct(recipeId: string, ingredientId: string, data: UpdateProductDTO) {
     await this.recipeProductRepository.update(recipeId, ingredientId, data);
+  }
+
+  async getProducts(recipeId: string) {
+    const results = [];
+    const products = await this.recipeProductRepository.getAll(recipeId);
+
+    for (const product of products) {
+      const ingredient = await this.ingredientService.get(product.ingredientId);
+      results.push({
+        ...ingredient,
+        measure: product.measure,
+        amount: product.amount,
+      });
+    }
+
+    return results;
   }
 
 }

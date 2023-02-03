@@ -37,7 +37,7 @@ enum Measure {
 model UserProduct {
   userId       String @map("user_id")
   ingredientId String @map("ingredient_id")
-  amount       String
+  amount       Float
 
   user       User       @relation(fields: [userId], references: [id])
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
@@ -49,12 +49,13 @@ model UserProduct {
 model Ingredient {
   id         String  @id @default(uuid())
   name       String
-  measure    Measure
+  standard   Measure
   categoryId String  @map("category_id")
 
-  category       IngredientCategory @relation(fields: [categoryId], references: [id])
-  userProducts   UserProduct[]
-  recipeProducts RecipeProduct[]
+  category           IngredientCategory  @relation(fields: [categoryId], references: [id])
+  userProducts       UserProduct[]
+  recipeProducts     RecipeProduct[]
+  ingredientMeasures IngredientMeasure[]
 
   @@map("ingredients")
 }
@@ -72,13 +73,24 @@ model Recipe {
   id          String @id @default(uuid())
   name        String
   description String
-  rating      Int
+  difficulty  Float
   categoryId  String @map("category_id")
 
   category RecipeCategory  @relation(fields: [categoryId], references: [id])
   products RecipeProduct[]
 
   @@map("recipes")
+}
+
+model IngredientMeasure {
+  ingredientId String  @map("ingredient_id")
+  measure      Measure
+  toStandart   Float   @map("to_standart")
+
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@id([ingredientId, measure])
+  @@map("ingredient_measures")
 }
 
 model RecipeCategory {
@@ -91,13 +103,23 @@ model RecipeCategory {
 }
 
 model RecipeProduct {
-  ingredientId String @map("ingredient_id")
-  recipeId     String @map("recipe_id")
+  ingredientId String  @map("ingredient_id")
+  recipeId     String  @map("recipe_id")
   amount       Float
+  measure      Measure
 
   recipe     Recipe     @relation(fields: [recipeId], references: [id])
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
 
   @@id([ingredientId, recipeId])
   @@map("recipe_products")
+}
+
+model DefaultMeasures {
+  from Measure
+  to Measure
+  coefficient Float
+
+  @@id([from, to])
+  @@map("default_measures")
 }

@@ -3,14 +3,14 @@ import { Measure } from "@prisma/client";
 export class CreateRecipeData {
   name: string;
   description: string;
-  rating: number;
+  difficulty: number;
   categoryId: string;
 }
 
 export class UpdateRecipeData {
   name?: string;
   description?: string;
-  rating?: number;
+  difficulty?: number;
   categoryId?: string;
 }
 

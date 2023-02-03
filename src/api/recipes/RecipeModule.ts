@@ -5,6 +5,7 @@ import { RecipeService } from "./RecipeService";
 import { RecipeCategoryService } from "./recipe-categories/RecipeCategoryService";
 import { RecipeByIdPipe } from "./RecipeByIdPipe";
 import { PrismaModule } from "../../database/PrismaModule";
+import { IngredientModule } from "../ingredients/IngredientModule";
 
 @Module({
   controllers: [RecipeController, RecipeCategoryController],
@@ -17,6 +18,6 @@ import { PrismaModule } from "../../database/PrismaModule";
     RecipeService,
     RecipeCategoryService,
   ],
-  imports: [PrismaModule],
+  imports: [PrismaModule, IngredientModule],
 })
 export class RecipeModule {}

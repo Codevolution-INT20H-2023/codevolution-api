@@ -7,7 +7,7 @@ export class CreateIngredientDTO {
 
   @IsEnum(Measure)
   @IsNotEmpty()
-  measure: Measure;
+  standard: Measure;
 
   @IsUUID()
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class UpdateIngredientDTO {
 
   @IsEnum(Measure)
   @IsOptional()
-  measure?: Measure;
+  standard?: Measure;
 
   @IsUUID()
   @IsOptional()

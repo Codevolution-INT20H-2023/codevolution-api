@@ -35,4 +35,12 @@ export class RecipeProductRepository {
       data,
     });
   }
+
+  async getAll(recipeId: string) {
+    return this.prisma.recipeProduct.findMany({
+      where: {
+        recipeId,
+      },
+    });
+  }
 }

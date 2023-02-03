@@ -2,12 +2,12 @@ import { Measure } from "@prisma/client";
 
 export class CreateIngredientData {
   name: string;
-  measure: Measure;
+  standard: Measure;
   categoryId: string;
 }
 
 export class UpdateIngredientData {
   name?: string;
-  measure?: Measure;
+  standard?: Measure;
   categoryId?: string;
 }

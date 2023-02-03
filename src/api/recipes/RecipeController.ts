@@ -11,10 +11,12 @@ export class RecipeController {
   ) {}
 
   @Get()
-  getAll(
+  async getAll(
     @Query() query,
   ) {
-    return this.recipeService.getAll(query);
+    const recipes = await this.recipeService.getAll(query);
+
+    return { recipes };
   }
 
   @Post()

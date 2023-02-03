@@ -33,7 +33,7 @@ export class CreateRecipeDTO extends CreateProductsDTO {
 
   @IsNumberString()
   @IsNotEmpty()
-  rating: number;
+  difficulty: number;
 
   @IsNotEmpty()
   categoryId: string;
@@ -48,7 +48,7 @@ export class UpdateRecipeDTO {
 
   @IsNumberString()
   @IsOptional()
-  rating?: number;
+  difficulty?: number;
 
   @IsOptional()
   categoryId?: string;

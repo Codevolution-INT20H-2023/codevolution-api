@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Put } from "@nestjs/common";
 import { UserByIdPipe } from "./UserByIdPipe";
 import { UserService } from "./UserService";
 import { CreateProductDTO, CreateProductsDTO, UpdateProductDTO } from "./UserDTOs";
@@ -20,11 +20,15 @@ export class UserController {
   }
 
   @Put('/:userId/products')
-  createProducts(
+  async createProducts(
     @Param('userId', UserByIdPipe) userId: string,
     @Body() body: CreateProductsDTO,
   ) {
-    return this.userService.createProducts(userId, body.products);
+    const products = await this.userService.createProducts(userId, body.products);
+
+    return {
+      products,
+    };
   }
 
   @Patch('/:userId/products/:ingredientId')
@@ -34,6 +38,13 @@ export class UserController {
     @Body() body: UpdateProductDTO,
   ) {
     return this.userService.updateProduct(userId, ingredientId, body);
+  }
+
+  @Get('/:userId/availableRecipes')
+  getAvailableRecipes(
+    @Param('userId', UserByIdPipe) userId: string,
+  ) {
+    return this.userService.getAvailableRecipes(userId);
   }
 
 }
