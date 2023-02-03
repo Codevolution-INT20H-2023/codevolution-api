@@ -7,10 +7,12 @@ import { ConfigModule } from "../../config/ConfigModule";
 import { SecurityConfigService } from "../../config/SecurityConfigService";
 import { LocalGuard } from "../../security/LocalGuard";
 import { JwtGuard } from "../../security/JwtGuard";
+import { LocalStrategy } from "../../security/LocalStrategy";
+import { JwtStrategy } from "../../security/JwtStrategy";
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, LocalGuard, JwtGuard],
+  providers: [AuthService, LocalGuard, JwtGuard, LocalStrategy, JwtStrategy],
   exports: [AuthService],
   imports: [PrismaModule,
     JwtModule.registerAsync({
