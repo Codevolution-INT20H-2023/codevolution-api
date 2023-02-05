@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../database/PrismaService";
 import { CreateIngredientData, UpdateIngredientData } from "./IngredientsDatas";
+import { QueryAllDTO } from "../QueryAllDTO";
+import { Measure } from "@prisma/client";
 
 @Injectable()
 export class IngredientRepository {
@@ -31,17 +33,43 @@ export class IngredientRepository {
     });
   }
 
-  get(id: string) {
+  get(id: string, { includeCategory = false, includeMeasures = false } = {}) {
     return this.prisma.ingredient.findUnique({
       where: {
         id,
       },
+      select: {
+        id: true,
+        name: true,
+        standard: true,
+        categoryId: !includeCategory,
+        category: includeCategory,
+        ingredientMeasures: includeMeasures,
+      },
     });
   }
 
-  getAll(query) {
+  getAll(query: QueryAllDTO, { includeCategory = false, includeMeasures = false }) {
     return this.prisma.ingredient.findMany({
-
+      where: {
+        name: {
+          contains: query.search,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        standard: true,
+        categoryId: !includeCategory,
+        category: includeCategory,
+        ingredientMeasures: includeMeasures ? {
+          select: {
+            measure: true,
+            toStandard: true,
+          },
+        } : false,
+      },
     });
   }
 
@@ -53,5 +81,23 @@ export class IngredientRepository {
     });
   }
 
+
+  async getMeasures(id: string) {
+    const ingredients = await this.prisma.ingredient.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        ingredientMeasures: {
+          select: {
+            measure: true,
+            toStandard: true,
+          },
+        },
+      },
+    });
+
+    return ingredients.ingredientMeasures;
+  }
 
 }

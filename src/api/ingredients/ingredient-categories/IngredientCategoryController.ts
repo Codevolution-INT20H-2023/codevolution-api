@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { IngredientCategoryService } from "./IngredientCategoryService";
 import { CreateIngredientCategoryDTO, UpdateIngredientCategoryDTO } from "./IngredientCategoryDTOs";
+import { QueryAllDTO } from "../../QueryAllDTO";
+import { JwtGuard } from "../../../security/JwtGuard";
 
 @Controller({
   path: '/ingredientCategories',
@@ -11,12 +13,15 @@ export class IngredientCategoryController {
   ) {}
 
   @Get()
-  getAll(
-    @Query() query,
+  async getAll(
+    @Query() query: QueryAllDTO,
   ) {
-    return this.ingredientCategoryService.getAll(query);
+    const categories = await this.ingredientCategoryService.getAll(query);
+
+    return { categories };
   }
 
+  @UseGuards(JwtGuard)
   @Post()
   create(
     @Body() body: CreateIngredientCategoryDTO,
@@ -31,6 +36,7 @@ export class IngredientCategoryController {
     return this.ingredientCategoryService.get(ingredientCategoryId);
   }
 
+  @UseGuards(JwtGuard)
   @Patch('/:ingredientCategoryId')
   update(
     @Param('ingredientCategoryId') ingredientCategoryId: string,
@@ -39,6 +45,7 @@ export class IngredientCategoryController {
     return this.ingredientCategoryService.update(ingredientCategoryId, body);
   }
 
+  @UseGuards(JwtGuard)
   @Delete('/:ingredientCategoryId')
   delete(
     @Param('ingredientCategoryId') ingredientCategoryId: string,

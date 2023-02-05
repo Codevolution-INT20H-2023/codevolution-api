@@ -85,7 +85,7 @@ model Recipe {
 model IngredientMeasure {
   ingredientId String  @map("ingredient_id")
   measure      Measure
-  toStandart   Float   @map("to_standart")
+  toStandard   Float   @map("to_standard")
 
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
 
@@ -116,8 +116,8 @@ model RecipeProduct {
 }
 
 model DefaultMeasures {
-  from Measure
-  to Measure
+  from        Measure
+  to          Measure
   coefficient Float
 
   @@id([from, to])
