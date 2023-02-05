@@ -1,15 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { RecipeRepository } from "./RecipeRepository";
-import { CreateProductDTO, CreateRecipeDTO, UpdateProductDTO, UpdateRecipeDTO } from "./RecipeDTOs";
+import {
+  CreateProductDTO,
+  CreateRecipeDTO,
+  UpdateProductDTO,
+  UpdateProductsElementDTO,
+  UpdateRecipeDTO,
+} from "./RecipeDTOs";
 import { RecipeProductRepository } from "./RecipeProductRepository";
-import { IngredientService } from "../ingredients/IngredientService";
 
 @Injectable()
 export class RecipeService {
   constructor(
     private recipeRepository: RecipeRepository,
     private recipeProductRepository: RecipeProductRepository,
-    private ingredientService: IngredientService,
   ) {}
 
   async create({ products, ...data }: CreateRecipeDTO) {
@@ -26,28 +30,16 @@ export class RecipeService {
     return this.recipeProductRepository.create(recipeId, data);
   }
 
-  async get(id: string) {
-    const recipe = await this.recipeRepository.get(id);
-    const products = await this.getProducts(id);
-
-    return {
-      ...recipe,
-      products,
-    };
+  get(id: string, includeProducts = false) {
+    return this.recipeRepository.get(id, includeProducts);
   }
 
   delete(id: string) {
     return this.recipeRepository.delete(id);
   }
 
-  async getAll(query) {
-    const results = [];
-    const recipes = await this.recipeRepository.getAll(query);
-    for (const recipe of recipes) {
-      results.push(await this.get(recipe.id));
-    }
-
-    return results;
+  async getAll(includeProducts = false) {
+    return this.recipeRepository.getAll(includeProducts);
   }
 
   update(id: string, data: UpdateRecipeDTO) {
@@ -74,19 +66,22 @@ export class RecipeService {
   }
 
   async getProducts(recipeId: string) {
-    const results = [];
-    const products = await this.recipeProductRepository.getAll(recipeId);
-
-    for (const product of products) {
-      const ingredient = await this.ingredientService.get(product.ingredientId);
-      results.push({
-        ...ingredient,
-        measure: product.measure,
-        amount: product.amount,
-      });
-    }
-
-    return results;
+    return this.recipeProductRepository.getAll(recipeId);
   }
 
+  async updateProducts(recipeId: string, products: UpdateProductsElementDTO[]) {
+    for (const { ingredientId, ...data } of products) {
+      await this.updateProduct(recipeId, ingredientId, data);
+    }
+  }
+
+  async deleteProducts(recipeId: string, ingredients: string[]) {
+    for (const ingredientId of ingredients) {
+      await this.deleteProduct(recipeId, ingredientId);
+    }
+  }
+
+  getProduct(recipeId, ingredientId) {
+    return this.recipeProductRepository.get(recipeId, ingredientId);
+  }
 }

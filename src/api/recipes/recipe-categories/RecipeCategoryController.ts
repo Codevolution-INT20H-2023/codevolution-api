@@ -1,6 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { CreateRecipeCategoryDTO, UpdateRecipeCategoryDTO } from "../RecipeDTOs";
 import { RecipeCategoryService } from "./RecipeCategoryService";
+import { JwtGuard } from "../../../security/JwtGuard";
+import { RecipeCategoryByIdPipe } from "./RecipeCategoryByIdPipe";
+import { RecipeByIdPipe } from "../RecipeByIdPipe";
+import { QueryAllDTO } from "../../QueryAllDTO";
 
 @Controller({
   path: '/recipeCategories',
@@ -10,13 +14,7 @@ export class RecipeCategoryController {
     private recipeCategoryService: RecipeCategoryService,
   ) {}
 
-  @Get()
-  getAll(
-    @Query() query,
-  ) {
-    return this.recipeCategoryService.getAll(query);
-  }
-
+  @UseGuards(JwtGuard)
   @Post()
   create(
     @Body() body: CreateRecipeCategoryDTO,
@@ -24,25 +22,36 @@ export class RecipeCategoryController {
     return this.recipeCategoryService.create(body);
   }
 
-  @Get('/:recipeCategoryId')
-  get(
-    @Param('recipeCategoryId') recipeCategoryId: string,
-  ) {
-    return this.recipeCategoryService.get(recipeCategoryId);
-  }
-
+  @UseGuards(JwtGuard)
   @Patch('/:recipeCategoryId')
   update(
-    @Param('recipeCategoryId') recipeCategoryId: string,
+    @Param('recipeCategoryId', RecipeByIdPipe) recipeCategoryId: string,
     @Body() body: UpdateRecipeCategoryDTO,
   ) {
     return this.recipeCategoryService.update(recipeCategoryId, body);
   }
 
+  @UseGuards(JwtGuard)
   @Delete('/:recipeCategoryId')
   delete(
-    @Param('recipeCategoryId') recipeCategoryId: string,
+    @Param('recipeCategoryId', RecipeCategoryByIdPipe) recipeCategoryId: string,
   ) {
     return this.recipeCategoryService.delete(recipeCategoryId);
+  }
+
+  @Get()
+  async getAll(
+    @Query() query: QueryAllDTO,
+  ) {
+    const categories = await this.recipeCategoryService.getAll(query);
+
+    return { categories };
+  }
+
+  @Get('/:recipeCategoryId')
+  get(
+    @Param('recipeCategoryId') recipeCategoryId: string,
+  ) {
+    return this.recipeCategoryService.get(recipeCategoryId);
   }
 }

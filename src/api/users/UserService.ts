@@ -49,6 +49,6 @@ export class UserService {
 
   async getAvailableRecipes(userId: string) {
     const products = await this.getProducts(userId);
-    const recipes = await this.recipeService.getAll({});
+    const recipes = await this.recipeService.getAll(true);
   }
 }

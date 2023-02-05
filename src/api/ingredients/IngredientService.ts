@@ -4,7 +4,6 @@ import { CreateIngredientDTO, UpdateIngredientDTO } from "./IngredientDTOs";
 import { IngredientCategoryRepository } from "./ingredient-categories/IngredientCategoryRepository";
 import { IngredientMeasureService } from "./ingredient-measures/IngredientMeasureService";
 import { QueryIngredientsDTO } from "../QueryAllDTO";
-import { Measure } from "@prisma/client";
 import { IngredientMeasureRepository } from "./ingredient-measures/IngredientMeasureRepository";
 
 @Injectable()
@@ -56,7 +55,7 @@ export class IngredientService {
   async getAll({ measures: includeMeasures, category: includeCategory, ...query }: QueryIngredientsDTO) {
     const dbIngredients = await this.ingredientRepository.getAll(
       query,
-      { includeMeasures, includeCategory }
+      { includeMeasures }
     );
     const ingredients = [];
 

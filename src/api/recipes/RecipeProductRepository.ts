@@ -14,6 +14,17 @@ export class RecipeProductRepository {
         recipeId,
         ...data,
       },
+      select: {
+        ingredient: {
+          select: {
+            id: true,
+            name: true,
+            category: true,
+          },
+        },
+        measure: true,
+        amount: true,
+      },
     });
   }
 
@@ -40,6 +51,37 @@ export class RecipeProductRepository {
     return this.prisma.recipeProduct.findMany({
       where: {
         recipeId,
+      },
+      select: {
+        ingredient: {
+          select: {
+            id: true,
+            name: true,
+            category: true,
+          },
+        },
+        measure: true,
+        amount: true,
+      },
+    });
+  }
+
+  async get(recipeId: string, ingredientId: string) {
+    return this.prisma.recipeProduct.findFirst({
+      where: {
+        recipeId,
+        ingredientId,
+      },
+      select: {
+        ingredient: {
+          select: {
+            id: true,
+            name: true,
+            category: true,
+          },
+        },
+        measure: true,
+        amount: true,
       },
     });
   }

@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../database/PrismaService";
 import { CreateIngredientData, UpdateIngredientData } from "./IngredientsDatas";
 import { QueryAllDTO } from "../QueryAllDTO";
-import { Measure } from "@prisma/client";
 
 @Injectable()
 export class IngredientRepository {
@@ -49,7 +48,7 @@ export class IngredientRepository {
     });
   }
 
-  getAll(query: QueryAllDTO, { includeCategory = false, includeMeasures = false }) {
+  getAll(query: QueryAllDTO, { includeMeasures = false }) {
     return this.prisma.ingredient.findMany({
       where: {
         name: {
@@ -61,8 +60,7 @@ export class IngredientRepository {
         id: true,
         name: true,
         standard: true,
-        categoryId: !includeCategory,
-        category: includeCategory,
+        category: true,
         ingredientMeasures: includeMeasures ? {
           select: {
             measure: true,
@@ -88,6 +86,7 @@ export class IngredientRepository {
         id,
       },
       select: {
+        standard: true,
         ingredientMeasures: {
           select: {
             measure: true,
@@ -96,7 +95,7 @@ export class IngredientRepository {
         },
       },
     });
-
+    ingredients.ingredientMeasures.push({ measure: ingredients.standard, toStandard: 1 });
     return ingredients.ingredientMeasures;
   }
 

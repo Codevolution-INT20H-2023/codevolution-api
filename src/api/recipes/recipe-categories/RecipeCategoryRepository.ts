@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../../database/PrismaService";
 import { CreateRecipeCategoryData, UpdateRecipeCategoryData } from "../RecipeDatas";
+import { QueryAllDTO } from "../../QueryAllDTO";
 
 @Injectable()
 export class RecipeCategoryRepository {
@@ -39,9 +40,14 @@ export class RecipeCategoryRepository {
     });
   }
 
-  getAll(query) {
+  getAll(query: QueryAllDTO) {
     return this.prisma.recipeCategory.findMany({
-
+      where: {
+        name: {
+          contains: query.search,
+          mode: 'insensitive',
+        },
+      },
     });
   }
 

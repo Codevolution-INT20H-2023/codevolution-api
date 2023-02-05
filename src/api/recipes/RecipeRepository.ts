@@ -11,19 +11,66 @@ export class RecipeRepository {
   create(data: CreateRecipeData) {
     return this.prisma.recipe.create({
       data,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        difficulty: true,
+        category: true,
+      },
     });
   }
 
-  getAll(query) {
+  getAll(includeProducts = false) {
+    console.log(includeProducts);
     return this.prisma.recipe.findMany({
-
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        difficulty: true,
+        description: true,
+        products: !includeProducts ? false : {
+          select: {
+            ingredient: {
+              select: {
+                id: true,
+                name: true,
+                category: true,
+              },
+            },
+            amount: true,
+            measure: true,
+          },
+        },
+      },
     });
   }
 
-  get(id: string) {
+  get(id: string, includeProducts = false) {
     return this.prisma.recipe.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        difficulty: true,
+        description: true,
+        products: !includeProducts ? false : {
+          select: {
+            ingredient: {
+              select: {
+                id: true,
+                name: true,
+                category: true,
+              },
+            },
+            amount: true,
+            measure: true,
+          },
+        },
       },
     });
   }

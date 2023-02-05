@@ -2,7 +2,6 @@ import { Measure } from "@prisma/client";
 import {
   IsEnum,
   IsNotEmpty, IsNumber,
-  IsNumberString,
   IsOptional,
   IsUUID,
   Matches, MaxLength,
@@ -72,7 +71,7 @@ export class CreateIngredientDTO extends CreateIngredientMeasuresDTO{
 }
 
 export class UpdateIngredientMeasureDTO {
-  @IsNumberString({}, {
+  @IsNumber({}, {
     message: 'The toStandard is not a number',
   })
   @IsNotEmpty({
