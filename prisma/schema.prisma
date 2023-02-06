@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id       String @id @default(uuid())
-  email    String
+  email    String @unique
   password String
 
   userProducts UserProduct[]
@@ -39,8 +39,8 @@ model UserProduct {
   ingredientId String @map("ingredient_id")
   amount       Float
 
-  user       User       @relation(fields: [userId], references: [id])
-  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
 
   @@id([userId, ingredientId])
   @@map("user_products")
@@ -48,11 +48,11 @@ model UserProduct {
 
 model Ingredient {
   id         String  @id @default(uuid())
-  name       String
+  name       String  @unique
   standard   Measure
   categoryId String  @map("category_id")
 
-  category           IngredientCategory  @relation(fields: [categoryId], references: [id])
+  category           IngredientCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   userProducts       UserProduct[]
   recipeProducts     RecipeProduct[]
   ingredientMeasures IngredientMeasure[]
@@ -62,7 +62,7 @@ model Ingredient {
 
 model IngredientCategory {
   id   String @id @default(uuid())
-  name String
+  name String @unique
 
   ingredients Ingredient[]
 
@@ -71,12 +71,12 @@ model IngredientCategory {
 
 model Recipe {
   id          String @id @default(uuid())
-  name        String
+  name        String @unique
   description String
   difficulty  Float
   categoryId  String @map("category_id")
 
-  category RecipeCategory  @relation(fields: [categoryId], references: [id])
+  category RecipeCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   products RecipeProduct[]
 
   @@map("recipes")
@@ -87,7 +87,7 @@ model IngredientMeasure {
   measure      Measure
   toStandard   Float   @map("to_standard")
 
-  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
 
   @@id([ingredientId, measure])
   @@map("ingredient_measures")
@@ -95,7 +95,7 @@ model IngredientMeasure {
 
 model RecipeCategory {
   id   String @id @default(uuid())
-  name String
+  name String @unique
 
   recipes Recipe[]
 
@@ -108,8 +108,8 @@ model RecipeProduct {
   amount       Float
   measure      Measure
 
-  recipe     Recipe     @relation(fields: [recipeId], references: [id])
-  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  recipe     Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
 
   @@id([ingredientId, recipeId])
   @@map("recipe_products")

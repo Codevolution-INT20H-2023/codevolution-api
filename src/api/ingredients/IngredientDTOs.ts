@@ -10,7 +10,7 @@ import {
 } from "class-validator";
 import { Type } from "class-transformer";
 
-export const UKRAINIAN_REGEX = /^[ҐЄІЇЬА-ЩЮЯґєіїьа-щюя\-' ]+$/g;
+export const UKRAINIAN_REGEX = /^[ҐЄІЇЬА-ЩЮЯґєіїьа-щюя\-' ]+$/;
 
 export class IngredientMeasureDTO {
   @IsEnum(Measure, {

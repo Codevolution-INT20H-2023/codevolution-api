@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable, PipeTransform } from "@nestjs/common";
-import { RecipeRepository } from "../recipes/RecipeRepository";
 import { IngredientRepository } from "./IngredientRepository";
 
 @Injectable()
