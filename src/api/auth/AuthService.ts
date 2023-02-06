@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRepository } from '../users/UserRepository';
 import { RegisterDTO, TokensDTO } from "./AuthDTOs";
 import { User } from "@prisma/client";
@@ -15,8 +15,12 @@ export class AuthService {
   ) {}
 
   async register(data: RegisterDTO) {
-    const user = await this.userRepository.create(data);
+    const dbUser = await this.userRepository.findByEmail(data.email);
+    if (dbUser) {
+      throw new BadRequestException('Email is already registered');
+    }
 
+    const user = await this.userRepository.create(data);
     return this.getTokens(user);
   }
 
