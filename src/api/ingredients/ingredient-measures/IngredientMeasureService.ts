@@ -1,14 +1,16 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { IngredientMeasureRepository } from "./IngredientMeasureRepository";
 import { IngredientMeasureDTO, UpdateIngredientMeasureDTO } from "../IngredientDTOs";
-import { Measure } from "@prisma/client";
+import { Ingredient, Measure } from "@prisma/client";
 import { IngredientRepository } from "../IngredientRepository";
+import { GlobalMeasureService } from "../../global-measures/GlobalMeasureService";
 
 @Injectable()
 export class IngredientMeasureService {
   constructor(
     private ingredientMeasureRepository: IngredientMeasureRepository,
     private ingredientRepository: IngredientRepository,
+    private globalMeasureService: GlobalMeasureService,
   ) {}
 
   getMeasures(ingredientId: string) {
@@ -50,5 +52,19 @@ export class IngredientMeasureService {
     for (const measure of measures) {
       await this.deleteMeasure(ingredientId, measure);
     }
+  }
+
+  async toStandard(ingredient: Ingredient, measure, amount) {
+    const { toStandard } = await this.ingredientMeasureRepository.getMeasure(ingredient.id, measure);
+    if (toStandard) {
+      return amount * toStandard;
+    }
+
+    const global = await this.globalMeasureService.get({ from: measure, to: ingredient.standard });
+    if (global) {
+      return amount * global.coefficient;
+    }
+
+    throw new BadRequestException('There is no measure, sorry :<');
   }
 }

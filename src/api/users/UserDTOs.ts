@@ -11,10 +11,10 @@ export class CreateProductDTO {
   amount: number;
 
   @IsUUID(4, {
-    message: 'The categoryId is not an UUIDv4',
+    message: 'The ingredientId is not an UUIDv4',
   })
   @IsNotEmpty({
-    message: 'The categoryId is empty',
+    message: 'The ingredientId is empty',
   })
   ingredientId: string;
 }
@@ -22,6 +22,9 @@ export class CreateProductDTO {
 export class CreateProductsDTO {
   @ValidateNested({ each: true })
   @Type(() => CreateProductDTO)
+  @IsNotEmpty({
+    message: 'The products array is empty',
+  })
   products: CreateProductDTO[];
 }
 

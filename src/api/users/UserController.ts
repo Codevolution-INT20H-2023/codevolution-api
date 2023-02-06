@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Request, UseGuards } from "@nestjs/common";
 import { UserByIdPipe } from "./UserByIdPipe";
 import { UserService } from "./UserService";
 import {
@@ -19,86 +19,88 @@ export class UserController {
     private userService: UserService,
   ) {}
 
+
+
   @UseGuards(JwtGuard)
-  @Post('/:userId/products')
+  @Post('/products')
   createProduct(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
     @Body() body: CreateProductDTO
   ) {
-    return this.userService.createProduct(userId, body);
+    return this.userService.createProduct(req.user.id, body);
   }
 
   @UseGuards(JwtGuard)
-  @Patch('/:userId/products/:ingredientId')
+  @Patch('/products/:ingredientId')
   updateProduct(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
     @Param('ingredientId') ingredientId: string,
     @Body() body: UpdateProductDTO,
   ) {
-    return this.userService.updateProduct(userId, ingredientId, body);
+    return this.userService.updateProduct(req.user.id, ingredientId, body);
   }
 
   @UseGuards(JwtGuard)
-  @Delete('/:userId/products/:ingredientId')
+  @Delete('/products/:ingredientId')
   deleteProduct(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
     @Param('ingredientId', IngredientByIdPipe) ingredientId: string,
   ) {
-    return this.userService.deleteProduct(userId, ingredientId);
+    return this.userService.deleteProduct(req.user.id, ingredientId);
   }
 
   @UseGuards(JwtGuard)
-  @Put('/:userId/products')
+  @Put('/products')
   async createProducts(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
     @Body() body: CreateProductsDTO,
   ) {
-    const products = await this.userService.createProducts(userId, body.products);
+    const products = await this.userService.createProducts(req.user.id, body.products);
 
     return { products };
   }
 
   @UseGuards(JwtGuard)
-  @Patch('/:userId/products')
+  @Patch('/products')
   updateProducts(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
     @Body() body: UpdateProductsDTO,
   ) {
-    return this.userService.updateProducts(userId, body.products);
+    return this.userService.updateProducts(req.user.id, body.products);
   }
 
   @UseGuards(JwtGuard)
-  @Delete('/:userId/products')
+  @Delete('/products')
   deleteProducts(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
     @Body() body: DeleteProductsDTO,
   ) {
-    return this.userService.deleteProducts(userId, body.ingredients);
+    return this.userService.deleteProducts(req.user.id, body.ingredients);
   }
 
   @UseGuards(JwtGuard)
-  @Get('/:userId/products')
+  @Get('/products')
   getProducts(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
   ) {
-    return this.userService.getProducts(userId);
+    return this.userService.getProducts(req.user.id);
   }
 
   @UseGuards(JwtGuard)
-  @Get('/:userId/products/:ingredientId')
+  @Get('/products/:ingredientId')
   getProduct(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
     @Param('ingredientId', IngredientByIdPipe) ingredientId: string,
   ) {
-    return this.userService.getProduct(userId, ingredientId);
+    return this.userService.getProduct(req.user.id, ingredientId);
   }
 
   @UseGuards(JwtGuard)
-  @Get('/:userId/availableRecipes')
+  @Get('/availableRecipes')
   getAvailableRecipes(
-    @Param('userId', UserByIdPipe) userId: string,
+    @Request() req,
   ) {
-    return this.userService.getAvailableRecipes(userId);
+    return this.userService.getAvailableRecipes(req.user.id);
   }
 
 }

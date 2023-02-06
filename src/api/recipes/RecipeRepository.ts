@@ -22,7 +22,6 @@ export class RecipeRepository {
   }
 
   getAll(includeProducts = false) {
-    console.log(includeProducts);
     return this.prisma.recipe.findMany({
       select: {
         id: true,
@@ -36,6 +35,7 @@ export class RecipeRepository {
               select: {
                 id: true,
                 name: true,
+                standard: true,
                 category: true,
               },
             },

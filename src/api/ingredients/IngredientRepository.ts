@@ -32,7 +32,7 @@ export class IngredientRepository {
     });
   }
 
-  get(id: string, { includeCategory = false, includeMeasures = false } = {}) {
+  get(id: string, { includeMeasures = false } = {}) {
     return this.prisma.ingredient.findUnique({
       where: {
         id,
@@ -41,8 +41,7 @@ export class IngredientRepository {
         id: true,
         name: true,
         standard: true,
-        categoryId: !includeCategory,
-        category: includeCategory,
+        category: true,
         ingredientMeasures: includeMeasures,
       },
     });

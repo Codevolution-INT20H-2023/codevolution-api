@@ -30,8 +30,8 @@ export class IngredientService {
     return this.formatIngredient(dbIngredient, false);
   }
 
-  async get(id: string, includeMeasures = false, includeCategory = false) {
-    const dbIngredient = await this.ingredientRepository.get(id, { includeMeasures, includeCategory });
+  async get(id: string, includeMeasures = false) {
+    const dbIngredient = await this.ingredientRepository.get(id, { includeMeasures });
     return this.formatIngredient(dbIngredient, includeMeasures);
   }
 
@@ -88,7 +88,13 @@ export class IngredientService {
     return results;
   }
 
-  async update(id: string, data: UpdateIngredientDTO) {
-    await this.ingredientRepository.update(id, data);
+  async update(id: string, { measures, ...data }: UpdateIngredientDTO) {
+    const ingredient = await this.ingredientRepository.update(id, data);
+
+    await this.ingredientMeasureRepository.deleteAll(ingredient.id);
+
+    for (const measure of measures) {
+      await this.ingredientMeasureRepository.create(ingredient.id, measure);
+    }
   }
 }

@@ -3,6 +3,8 @@ import { UserRepository } from "./UserRepository";
 import { UserProductRepository } from "./UserProductRepository";
 import { CreateProductDTO, UpdateProductDTO, UpdateProductsElementDTO } from "./UserDTOs";
 import { RecipeService } from "../recipes/RecipeService";
+import { IngredientMeasureService } from "../ingredients/ingredient-measures/IngredientMeasureService";
+import { Ingredient, IngredientCategory, Measure, RecipeProduct, UserProduct } from "@prisma/client";
 
 @Injectable()
 export class UserService {
@@ -10,6 +12,7 @@ export class UserService {
     private userRepository: UserRepository,
     private userProductRepository: UserProductRepository,
     private recipeService: RecipeService,
+    private ingredientMeasureService: IngredientMeasureService,
   ) {}
 
 
@@ -37,8 +40,31 @@ export class UserService {
   }
 
   async getAvailableRecipes(userId: string) {
-    const products = await this.getProducts(userId);
+    const userProducts = await this.getProducts(userId);
     const recipes = await this.recipeService.getAll(true);
+
+    const results = [];
+
+    for (const { products: recipeProducts, ...recipe } of recipes) {
+      const isGood = await this.checkProducts(userProducts as any, recipeProducts as any);
+      if (isGood) results.push(recipe);
+    }
+
+    return results;
+  }
+
+  async checkProducts(
+    userProducts: any,
+    recipeProducts: any,
+  ) {
+    for (const recipeProduct of recipeProducts) {
+      const userProduct = userProducts.find((p) => p.ingredient.id === recipeProduct.ingredient.id);
+      const standardAmount = await this.ingredientMeasureService.toStandard((recipeProduct as any).ingredient, recipeProduct.measure, recipeProduct.amount);
+
+      if (!userProduct || userProduct.amount < standardAmount) return false;
+    }
+
+    return true;
   }
 
   async updateProduct(userId: string, ingredientId: string, data: UpdateProductDTO) {

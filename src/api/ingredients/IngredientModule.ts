@@ -6,6 +6,7 @@ import { IngredientCategoryService } from "./ingredient-categories/IngredientCat
 import { PrismaModule } from "../../database/PrismaModule";
 import { IngredientByIdPipe } from "./IngredientByIdPipe";
 import { IngredientMeasureService } from "./ingredient-measures/IngredientMeasureService";
+import { GlobalMeasureModule } from "../global-measures/GlobalMeasureModule";
 
 @Module({
   controllers: [IngredientCategoryController, IngredientController],
@@ -21,6 +22,6 @@ import { IngredientMeasureService } from "./ingredient-measures/IngredientMeasur
     IngredientMeasureService,
     IngredientByIdPipe,
   ],
-  imports: [PrismaModule],
+  imports: [PrismaModule, GlobalMeasureModule],
 })
 export class IngredientModule {}

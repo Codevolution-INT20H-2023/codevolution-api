@@ -32,9 +32,8 @@ export class IngredientController {
   get(
     @Param('ingredientId', IngredientByIdPipe) ingredientId: string,
     @Query('measures') measures: boolean,
-    @Query('category') category: boolean,
   ) {
-    return this.ingredientService.get(ingredientId, measures, category);
+    return this.ingredientService.get(ingredientId, measures);
   }
 
   @UseGuards(JwtGuard)

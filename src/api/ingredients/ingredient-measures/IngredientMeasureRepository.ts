@@ -64,4 +64,12 @@ export class IngredientMeasureRepository {
       },
     });
   }
+
+  deleteAll(ingredientId: string) {
+    return this.prisma.ingredientMeasure.deleteMany({
+      where: {
+        ingredientId,
+      },
+    });
+  }
 }

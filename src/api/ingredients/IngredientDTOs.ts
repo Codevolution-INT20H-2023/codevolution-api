@@ -114,6 +114,11 @@ export class UpdateIngredientDTO {
   })
   @IsOptional()
   categoryId?: string;
+
+  @ValidateNested({ each: true })
+  @Type(() => IngredientMeasureDTO)
+  @IsOptional()
+  measures?: IngredientMeasureDTO[];
 }
 
 export class DeleteMeasuresDTO {

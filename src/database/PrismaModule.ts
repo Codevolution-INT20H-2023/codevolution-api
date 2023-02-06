@@ -8,6 +8,7 @@ import { IngredientRepository } from "../api/ingredients/IngredientRepository";
 import { RecipeProductRepository } from "../api/recipes/RecipeProductRepository";
 import { IngredientMeasureRepository } from "../api/ingredients/ingredient-measures/IngredientMeasureRepository";
 import { UserProductRepository } from "../api/users/UserProductRepository";
+import { GlobalMeasureRepository } from "../api/global-measures/GlobalMeasureRepository";
 
 @Module({
   providers: [
@@ -20,6 +21,7 @@ import { UserProductRepository } from "../api/users/UserProductRepository";
     IngredientMeasureRepository,
     IngredientRepository,
     UserProductRepository,
+    GlobalMeasureRepository,
   ],
   exports: [
     PrismaService,
@@ -31,6 +33,7 @@ import { UserProductRepository } from "../api/users/UserProductRepository";
     IngredientMeasureRepository,
     IngredientRepository,
     UserProductRepository,
+    GlobalMeasureRepository,
   ],
 })
 export class PrismaModule {}
