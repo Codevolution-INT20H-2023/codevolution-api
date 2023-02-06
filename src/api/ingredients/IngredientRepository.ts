@@ -12,6 +12,12 @@ export class IngredientRepository {
   create(data: CreateIngredientData) {
     return this.prisma.ingredient.create({
       data,
+      select: {
+        id: true,
+        name: true,
+        standard: true,
+        category: true,
+      },
     });
   }
 

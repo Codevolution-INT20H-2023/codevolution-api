@@ -88,7 +88,7 @@ export class IngredientService {
     return results;
   }
 
-  async update(id: string, { measures, ...data }: UpdateIngredientDTO) {
+  async update(id: string, { measures = [], ...data }: UpdateIngredientDTO) {
     const ingredient = await this.ingredientRepository.update(id, data);
 
     await this.ingredientMeasureRepository.deleteAll(ingredient.id);
