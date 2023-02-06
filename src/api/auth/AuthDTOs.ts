@@ -9,6 +9,5 @@ export class RegisterDTO {
 }
 
 export class TokensDTO {
-  refreshToken: string;
   accessToken: string;
 }

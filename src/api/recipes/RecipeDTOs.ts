@@ -29,10 +29,10 @@ export class CreateProductDTO {
   amount: number;
 
   @IsEnum(Measure, {
-    message: 'The standard is not an enum',
+    message: 'The measure is not an enum',
   })
   @IsNotEmpty({
-    message: 'The standard is empty',
+    message: 'The measure is empty',
   })
   measure: Measure;
 }

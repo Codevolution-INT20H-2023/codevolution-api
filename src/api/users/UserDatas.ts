@@ -7,11 +7,9 @@ export class CreateUserData {
 
 export class CreateProductData {
   amount: number;
-  measure: Measure;
   ingredientId: string;
 }
 
 export class UpdateProductData {
-  amount?: number;
-  measure?: Measure;
+  amount: number;
 }

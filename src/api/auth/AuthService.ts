@@ -31,19 +31,12 @@ export class AuthService {
     const payload = this.createPayload(user);
 
     return {
-      refreshToken: this.getRefreshToken(payload),
       accessToken: this.getAccessToken(payload),
     };
   }
 
   getAccessToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
-  }
-
-  getRefreshToken(payload: JwtPayload) {
-    return this.jwtService.sign(payload, {
-      expiresIn: this.securityConfig.jwtRefreshTtl,
-    });
   }
 
   login(user: User) {

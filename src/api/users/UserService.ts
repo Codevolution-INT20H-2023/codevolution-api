@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./UserRepository";
 import { UserProductRepository } from "./UserProductRepository";
-import { CreateProductDTO, UpdateProductDTO } from "./UserDTOs";
+import { CreateProductDTO, UpdateProductDTO, UpdateProductsElementDTO } from "./UserDTOs";
 import { IngredientService } from "../ingredients/IngredientService";
 import { RecipeService } from "../recipes/RecipeService";
 
@@ -30,25 +30,36 @@ export class UserService {
     return results;
   }
 
-  updateProduct(userId: string, ingredientId: string, data: UpdateProductDTO) {
-    return this.userProductRepository.update(userId, ingredientId, data);
+  getProduct(userId: string, ingredientId) {
+    return this.userProductRepository.get(userId, ingredientId);
   }
 
-  async getProducts(userId: string) {
-    const results = [];
-    const products = await this.userProductRepository.getAll(userId);
-    for (const product of products) {
-      const ingredient = await this.ingredientService.get(product.ingredientId);
-      results.push({
-        amount: product.amount,
-        ...ingredient,
-      });
-    }
-    return results;
+  getProducts(userId: string) {
+    return this.userProductRepository.getAll(userId);
   }
 
   async getAvailableRecipes(userId: string) {
     const products = await this.getProducts(userId);
     const recipes = await this.recipeService.getAll(true);
+  }
+
+  async updateProduct(userId: string, ingredientId: string, data: UpdateProductDTO) {
+    await this.userProductRepository.update(userId, ingredientId, data);
+  }
+
+  async updateProducts(userId: string, products: UpdateProductsElementDTO[]) {
+    for (const { ingredientId, amount } of products) {
+      await this.updateProduct(userId, ingredientId, { amount });
+    }
+  }
+
+  async deleteProduct(userId: string, ingredientId: string) {
+    await this.userProductRepository.delete(userId, ingredientId);
+  }
+
+  async deleteProducts(userId: string, ingredients: string[]) {
+    for (const ingredientId of ingredients) {
+      await this.userProductRepository.delete(userId, ingredientId);
+    }
   }
 }

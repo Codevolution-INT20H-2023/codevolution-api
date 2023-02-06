@@ -14,6 +14,17 @@ export class UserProductRepository {
         userId,
         ...data,
       },
+      select: {
+        ingredient: {
+          select: {
+            id: true,
+            name: true,
+            standard: true,
+            category: true,
+          },
+        },
+        amount: true,
+      },
     });
   }
 
@@ -32,11 +43,42 @@ export class UserProductRepository {
       where: {
         userId,
       },
+      select: {
+        ingredient: {
+          select: {
+            id: true,
+            name: true,
+            standard: true,
+            category: true,
+          },
+        },
+        amount: true,
+      },
     });
   }
 
   get(userId, ingredientId) {
     return this.prisma.userProduct.findFirst({
+      where: {
+        userId,
+        ingredientId,
+      },
+      select: {
+        ingredient: {
+          select: {
+            id: true,
+            name: true,
+            standard: true,
+            category: true,
+          },
+        },
+        amount: true,
+      },
+    });
+  }
+
+  delete(userId: string, ingredientId: string) {
+    return this.prisma.userProduct.deleteMany({
       where: {
         userId,
         ingredientId,
