@@ -3,7 +3,6 @@ import { CreateRecipeCategoryDTO, UpdateRecipeCategoryDTO } from "../RecipeDTOs"
 import { RecipeCategoryService } from "./RecipeCategoryService";
 import { JwtGuard } from "../../../security/JwtGuard";
 import { RecipeCategoryByIdPipe } from "./RecipeCategoryByIdPipe";
-import { RecipeByIdPipe } from "../RecipeByIdPipe";
 import { QueryAllDTO } from "../../QueryAllDTO";
 
 @Controller({
@@ -25,7 +24,7 @@ export class RecipeCategoryController {
   @UseGuards(JwtGuard)
   @Patch('/:recipeCategoryId')
   update(
-    @Param('recipeCategoryId', RecipeByIdPipe) recipeCategoryId: string,
+    @Param('recipeCategoryId', RecipeCategoryByIdPipe) recipeCategoryId: string,
     @Body() body: UpdateRecipeCategoryDTO,
   ) {
     return this.recipeCategoryService.update(recipeCategoryId, body);
@@ -50,7 +49,7 @@ export class RecipeCategoryController {
 
   @Get('/:recipeCategoryId')
   get(
-    @Param('recipeCategoryId') recipeCategoryId: string,
+    @Param('recipeCategoryId', RecipeCategoryByIdPipe) recipeCategoryId: string,
   ) {
     return this.recipeCategoryService.get(recipeCategoryId);
   }
