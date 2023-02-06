@@ -19,6 +19,7 @@ export class GlobalMeasureController {
     return this.globalMeasureService.create(body);
   }
 
+  @UseGuards(JwtGuard)
   @Patch()
   update(
     @Body() body: GlobalMeasureDTO
@@ -26,6 +27,7 @@ export class GlobalMeasureController {
     return this.globalMeasureService.update(body);
   }
 
+  @UseGuards(JwtGuard)
   @Post()
   delete(
     @Body() body: FromToDTO
