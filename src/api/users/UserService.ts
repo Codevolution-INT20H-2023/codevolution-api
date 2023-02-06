@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./UserRepository";
 import { UserProductRepository } from "./UserProductRepository";
 import { CreateProductDTO, UpdateProductDTO, UpdateProductsElementDTO } from "./UserDTOs";
-import { IngredientService } from "../ingredients/IngredientService";
 import { RecipeService } from "../recipes/RecipeService";
 
 @Injectable()
@@ -10,7 +9,6 @@ export class UserService {
   constructor(
     private userRepository: UserRepository,
     private userProductRepository: UserProductRepository,
-    private ingredientService: IngredientService,
     private recipeService: RecipeService,
   ) {}
 
