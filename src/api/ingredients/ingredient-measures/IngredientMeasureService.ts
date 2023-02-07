@@ -60,6 +60,8 @@ export class IngredientMeasureService {
       return amount * dbMeasure.toStandard;
     }
 
+    console.log(ingredient, measure, amount);
+
     const global = await this.globalMeasureService.get({ from: measure, to: ingredient.standard });
     if (global) {
       return amount * global.coefficient;
