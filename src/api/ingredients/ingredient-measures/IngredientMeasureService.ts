@@ -67,6 +67,6 @@ export class IngredientMeasureService {
       return amount * global.coefficient;
     }
 
-    throw new BadRequestException('There is no measure, sorry :<');
+    return Number.POSITIVE_INFINITY;
   }
 }
