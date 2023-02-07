@@ -45,6 +45,7 @@ The documentation of Codevolution API is <a href="https://github.com/Codevolutio
 ## Stay in touch
 
 - Author - [Sviatoslav Shesterov](https://github.com/just-hoshinon)
+- Deployed using <a href="https://dashboard.heroku.com/apps" target="blank">Heroku</a>.
 
 ## License
 
