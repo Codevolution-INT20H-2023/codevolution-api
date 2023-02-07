@@ -99,10 +99,10 @@ export class UserController {
 
   @UseGuards(JwtGuard)
   @Get('/availableRecipes')
-  getAvailableRecipes(
+  async getAvailableRecipes(
     @Request() req,
   ) {
-    const availableRecipes =  this.userService.getAvailableRecipes(req.user.id);
+    const availableRecipes = await this.userService.getAvailableRecipes(req.user.id);
 
     return { availableRecipes };
   }
