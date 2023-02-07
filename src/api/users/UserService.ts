@@ -59,7 +59,13 @@ export class UserService {
   ) {
     for (const recipeProduct of recipeProducts) {
       const userProduct = userProducts.find((p) => p.ingredient.id === recipeProduct.ingredient.id);
-      const standardAmount = await this.ingredientMeasureService.toStandard((recipeProduct as any).ingredient, recipeProduct.measure, recipeProduct.amount);
+
+      let standardAmount;
+      if (recipeProduct.ingredient.standard === recipeProduct.measure) {
+        standardAmount = recipeProduct.amount;
+      } else {
+        standardAmount = await this.ingredientMeasureService.toStandard((recipeProduct as any).ingredient, recipeProduct.measure, recipeProduct.amount);
+      }
 
       if (!userProduct || userProduct.amount < standardAmount) return false;
     }
