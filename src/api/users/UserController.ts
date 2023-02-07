@@ -102,7 +102,9 @@ export class UserController {
   getAvailableRecipes(
     @Request() req,
   ) {
-    return this.userService.getAvailableRecipes(req.user.id);
+    const availableRecipes =  this.userService.getAvailableRecipes(req.user.id);
+
+    return { availableRecipes };
   }
 
 }
