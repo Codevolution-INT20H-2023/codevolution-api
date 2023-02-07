@@ -98,7 +98,7 @@ export class RecipeRepository {
   }
 
   delete(id: string) {
-    return this.prisma.user.delete({
+    return this.prisma.recipe.delete({
       where: {
         id,
       },
