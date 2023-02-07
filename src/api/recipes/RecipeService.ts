@@ -42,7 +42,7 @@ export class RecipeService {
     return this.recipeRepository.getAll(includeProducts);
   }
 
-  async update(id: string, { products, ...data }: UpdateRecipeDTO) {
+  async update(id: string, { products = [], ...data }: UpdateRecipeDTO) {
     await this.recipeRepository.update(id, data);
     await this.recipeProductRepository.deleteAll(id);
 
