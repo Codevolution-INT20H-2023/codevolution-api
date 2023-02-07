@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { GlobalMeasureService } from "./GlobalMeasureService";
 import { FromToDTO, GlobalMeasureDTO } from "./GlobalMeasureDTOs";
 import { JwtGuard } from "../../security/JwtGuard";
@@ -28,7 +28,7 @@ export class GlobalMeasureController {
   }
 
   @UseGuards(JwtGuard)
-  @Post()
+  @Delete()
   delete(
     @Body() body: FromToDTO
   ) {

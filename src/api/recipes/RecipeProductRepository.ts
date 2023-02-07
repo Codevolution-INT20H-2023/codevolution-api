@@ -85,4 +85,12 @@ export class RecipeProductRepository {
       },
     });
   }
+
+  async deleteAll(recipeId: string) {
+    return this.prisma.recipeProduct.deleteMany({
+      where: {
+        recipeId,
+      },
+    });
+  }
 }

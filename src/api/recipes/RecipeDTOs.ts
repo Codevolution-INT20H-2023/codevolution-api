@@ -121,6 +121,11 @@ export class UpdateRecipeDTO {
   })
   @IsOptional()
   categoryId?: string;
+
+  @ValidateNested({ each: true })
+  @Type(() => (UpdateProductsElementDTO))
+  @IsOptional()
+  products?: UpdateProductsElementDTO[];
 }
 
 export class UpdateRecipeCategoryDTO {
@@ -182,13 +187,13 @@ export class UpdateProductsElementDTO {
     message: 'The amount is not a number',
   })
   @IsOptional()
-  amount?: number;
+  amount: number;
 
   @IsEnum(Measure, {
     message: 'The measure is not an enum',
   })
   @IsOptional()
-  measure?: Measure;
+  measure: Measure;
 }
 
 export class UpdateProductsDTO {
