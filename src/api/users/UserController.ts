@@ -80,10 +80,12 @@ export class UserController {
 
   @UseGuards(JwtGuard)
   @Get('/products')
-  getProducts(
+  async getProducts(
     @Request() req,
   ) {
-    return this.userService.getProducts(req.user.id);
+    const products = await this.userService.getProducts(req.user.id);
+
+    return { products };
   }
 
   @UseGuards(JwtGuard)
