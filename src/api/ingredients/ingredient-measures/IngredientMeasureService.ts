@@ -55,9 +55,9 @@ export class IngredientMeasureService {
   }
 
   async toStandard(ingredient: Ingredient, measure, amount) {
-    const { toStandard } = await this.ingredientMeasureRepository.getMeasure(ingredient.id, measure);
-    if (toStandard) {
-      return amount * toStandard;
+    const dbMeasure = await this.ingredientMeasureRepository.getMeasure(ingredient.id, measure);
+    if (dbMeasure) {
+      return amount * dbMeasure.toStandard;
     }
 
     const global = await this.globalMeasureService.get({ from: measure, to: ingredient.standard });
